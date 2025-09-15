@@ -1,0 +1,8 @@
+Kezia Sharnoff
+September 15, 2025
+
+I have successfully installed Kali and I have been able to run Burp Suite and Chromium. I do not have any specific plans about how I will be using Kali. There are many categories of different security tools in the application folder which seem like they would be useful in the future. 
+
+I noticed some of the key bindings for browsers did not work because my computer assumed I wanted those applied to the UTM app instead of the browser within Kali. 
+
+I was unable to use any of the browsers in Kali (Firefox or Chromium via Burp Suite) to connect to any websites, HTTPS or HTTP. I was able to use curl to get an HTTP response. I got no HTTP response on Chromium / Burp Suite while Firefox failed to send any request, because "The proxy server is refusing connections". 
