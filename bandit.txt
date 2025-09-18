@@ -1,0 +1,43 @@
+Kezia Sharnoff
+bandit.txt
+September 17, 2025
+
+Level 0 -> Level 1: ZjLjTmM6FvvyRnrb2rfNWOZOTa6ip5If
+I wrote 'cat readme' which printed the password. The important lesson is how to view a file.
+
+Level 1 -> Level 2: 263JGJPfgU6LtdEvgfWU1XP5yac29mFx
+If I try to open a file named -, it reads from stdin. After reading the man vim pages, I can see that I must prepend a --, I used 'vim -- -' to open the file. The important lesson is how to open unusual files and to read the vim man pages. 
+
+Level 2 -> Level 3: MNk8KNH3Usiio41PRUEoDFPqfxLPlSmx
+I cannot open a file that starts with -- either. I used 'vim -- --spaces\ in\ this\ filename--'. The important lesson is that spaces are must be escaped as '\ ' in file names.
+
+Level 3 -> Level 4: 2WmrDFRmJIq3IPxneAaMGhap0pFhF3NJ
+I navigated to the inhere directory using cd, then used 'ls -a' to view hidden files, and then cat'd the file. The important lesson is using ls -a to view hidden files.
+
+Level 4 -> Level 5: 4oQYVPkxZOOEOO5pTW81FB8j8lxXGUQw
+I navigated to the inhere directory using cd, then used 'less -- [file name]' until I did not get the warning that the file was a binary file. The important lesson is that a way to identify non-binary files is to not see the binary file warning. 
+
+Level 5 -> Level 6: HWasnPhtq9AVKe0dmk45nxy20cvUa6EG
+I ran 'ls -l -a [directory]' for all the directories in inhere. I looked at the list of files to see the one with exactly 1033 bytes. The important lesson is using both -l and -a combined. This could have been done more efficiently with find, like in Level 6 -> Level 7.
+
+Level 6 -> Level 7: morbNTDkSW6jIlUc0ymOdMaLnOlFVAaj
+I first read grep's man pages to see if I could do this with grep. grep had no mention of size or group names, so I looked at find. I read find's man pages to see that I can search by size (writing bytes as c), group name, and user name. I also consulted a website (https://servicenow.iu.edu/kb?id=kb_article_view&sysparm_article=KB0022712) to understand the ordering of the arguments because I had trouble with calling find. 
+I went to the topmost directory (/) and searched with 'find . -size 33c -user bandit7 -group bandit6'. The one file that did not say "permission denied" was the correct one. The important lesson is how to use find with multiple parameters. 
+
+Level 7 -> Level 8: dfwvzFQi4mU0wfNbFOe9RoWskMLg7eEc
+I wrote 'grep millionth data.txt' which returned the line with the word millionth. The important lesson is how to use grep to search text within files. 
+
+Level 8 -> Level 9: 4CKMh1JI91bUIZZPXDqGanal4xvAg0JM
+Looking at the hints, I read the man pages for uniq and saw that it can print out only unique lines. This did not work however, because it can only tell if lines are unique next to the other lines. I ended up sorting and then passing it to uniq: 'sort data.txt | uniq --unique -'. The - at the end prints to stdout. The important lesson is how to pipe commands together and to use sort & uniq.
+
+Level 9 -> Level 10: FGUW5ilLVJrxX9kMYMmlN4MgbpfMiqey
+I tried to grep for ==, but grep tried to treat == as an operator and not a string. Then, grep was treating the file as a binary file that could not be read. I read through the man pages to find --text which treats a binary file as text. I then used 'grep --text '==' data.txt' which returned me the answer. The important lesson is how to use --text and putting quotes around search strings. 
+
+Level 10 -> Level 11: dtR173fZKb0RRsDFSGsg2RWnpNVj3qRr
+Looking from the hint, I read the man pages for base64 and then used the -d flag to decode. I wrote 'cat data.txt | base64 -d'. The important lesson is how to decode base64 and that the library exists. 
+
+Level 11 -> Level 12: 7x16WNeHIi5YkIhWsfFIqoognUTyj9Q4
+I read the hint to know that I need to translate the alphabet into something that goes from N to Z to M. I looked at the man pages for each of the listed functions and saw that tr lets you translate letters. I looked at https://www.ibm.com/docs/en/aix/7.1.0?topic=t-tr-command to understand the ordering of how to use the tr command, but was getting an error when I tried to just change [a-z] to [n-m]. I then tried [n-za-m] and that worked. I used 'tr 'A-Za-z' 'N-ZA-Mn-za-m' < data.txt' to get the final answer. The important lessons is how to translate characters and use tr. 
+
+Level 12 -> Level 13:
+First, I converted the data to binary from the hexdump ('xxd -r [filename] [newfile]') and then worked on the compression. I initially thought that it was compressed and then hexdumped, but it was not (because none of the un-compressors worked). I then added the gzip suffix (.gz) at the end, then gunzip ('gunzip file.gz'). I added the bzip2 suffix (.bz2) at the end, then I bunzip2 ('bunzip2 fil.bz2'). Then I did gunzip again. I have tried bunzip, gunzip, and tar --x but have been unable to make more progress. I may have done some uncompressing in the wrong order that the uncompressors did not flag as an error. The important lesson is how to use xxd to hexdump and un-hexdump, using different (un)compression methods, and writing the necessary suffixes for the compression methods. 
