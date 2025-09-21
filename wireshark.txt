@@ -1,0 +1,60 @@
+Kezia Sharnoff
+September 20, 2025
+Wireshark
+
+===== DAYTIME =====
+1) The three parts of the TCP handshake would be: 
+
+Number  Source        Destination   Info
+1       192.168.64.2  129.6.15.29   [SYN] Seq=0 Win=64240 Len=0 MSS=1460 
+                                        SACK_PERM TSval=33221936906 TSecr=0 
+                                        WS=128
+2       129.6.15.29   192.168.64.2  [SYN, ACK] Seq=0 Ack=1 Win=65535 Len=0 
+                                        MSS=1382 WS=64 SACK_PERM
+3       192.168.64.2  129.6.15.29   [ACK] Seq=1 Ack=1 Win=64256 Len=0
+
+
+2) The client port is 40340, it is labeled as the source port for the packets 
+that leave from Kali (192.168.64.2).
+
+
+3) The client needs a port because there could be different application 
+processes running on the client machine, so when the computer gets the TCP 
+responses, it needs to know what process (and its port) that it must send it 
+to. 
+
+
+4) The frame with the actual date and time looks like:
+Number  Source        Destination    Info
+4       129.6.15.29   192.168.64.2   105 DAYTIME RESPONSE
+
+
+5) [SYN] refers to synchronization and is used by the client and server to 
+start communication and make sure they know each other. [ACK] means 
+acknowledgement, that the destination got what was sent it. 
+
+
+6) The Kali client initiated closing the TCP connection by sending [FIN, ACK].
+The daytime server also sent [FIN] to mean that it had finished sending all 
+of the requested information.
+
+
+===== HTTP ===== 
+1) Four TCP connections were opened. I can tell by using the capture filter 
+tcp.flags.syn == 1 and checking the packets that were sent by Kali. Kali sent 
+four [Syn] packets each with a different source port. They must be different
+connections because they have different ports. 
+
+
+2) Yes. I believe that this is requesting index.html because it is marked as an 
+HTML GET request and has the name of the file. 
+
+Number  Source        Destination       Protocol  Length Info
+8       192.168.64.2  172.233.221.124   HTTP      424    GET /index.html HTTP/1.1
+
+
+
+3) Yes. Same reasoning as for question 2). 
+
+Number   Source        Destination       Protocol  Length Info
+21       192.168.64.2  172.233.221.124   HTTP      463    GET /jeff-square-colorado.jpg HTTP/1.1
