@@ -1,5 +1,6 @@
-- Kezia Sharnoff
-- October 5, 2025
+Kezia Sharnoff
+
+October 5, 2025
 
 CS338 Computer Security
 
