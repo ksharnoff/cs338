@@ -1,5 +1,9 @@
 # Eve
 
+CS338 Computer Security
+Kezia Sharnoff
+September 28, 2025
+
 ## Diffie Hellman
 
 In order to figure out the shared secret number between Bob and Alice, I had to find Alice's (or Bob's) individual secret number. I decided to solve for both Alice's and Bob's individual secret numbers in order to double check my work. I did this by iterating through all the options until I got one that matched, using the following function:
