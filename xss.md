@@ -9,9 +9,6 @@ CS338 Computer Security
 
 ## Part 1: Cookies
 
-
-Using Kali!!
-
 ### A
 
 There is only one cookie, with the name `theme` and the value `default`. 
