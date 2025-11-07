@@ -1,0 +1,6 @@
+import os
+
+
+# DO THE DELETE FIRST, IT DELETES THE FILE BUT NOT THE COMPILED PROCESS WOOT WOOT
+os.remove("runner.py")
+os.system("python3 hello.py")
