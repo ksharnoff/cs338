@@ -1,3 +1,0 @@
-([('basicKeyLogger',
-   '/Users/kezia/security/git338/project/user/dist/basicKeyLogger',
-   'EXECUTABLE')],)
