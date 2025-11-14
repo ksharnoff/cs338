@@ -1,0 +1,6 @@
+# This is the client keylogger config file
+# This config file can be edited while the keylogger is running
+# it does not need to be restarted!
+port 48939
+server 192.168.64.2
+username kezia154
