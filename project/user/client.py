@@ -9,7 +9,7 @@ Basics of the TCP connection from Amy Csizmar Dalal CS331 Networks Fall 2025
 https://github.com/acdalal/cs331-gopher/blob/main/gopherClient.py
 '''	
 
-import socket, os, random, io
+import socket, os, random, io, time
 from Crypto.Cipher import AES
 from Crypto.Random import get_random_bytes
 
@@ -176,10 +176,12 @@ def sendMessage(msg):
 		encryptedKey = encryptKey(aes_key)
 		encodedKey = encodeKey(encryptedKey)
 		clientSock.sendall(encodedKey)
+		time.sleep(0.5)
 
 		encryptedMsg = encryptMessage(msg, aes_key)
 		# do not need to encode because the encryption is bytes
 		clientSock.sendall(encryptedMsg)
+		time.sleep(0.5)
 
 		if len(username) > 0:
 			encryptedUser = encryptMessage(username, aes_key)
