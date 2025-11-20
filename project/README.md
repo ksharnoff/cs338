@@ -2,19 +2,11 @@
 
 Kezia Sharnoff, CS338 Computer Security, November 12, 2025
 
-## Note on November 14th
-
-After the deadline passed, I realized that I forgot to submit a video demo. I also found an occasional problem with the TCP byte stream to Kali (in `client.py`) that can be fixed with two lines of code -- it already always worked on localhost (the many files changed is recompiling the executables). 
-
-I have added this extra commit, which is late, because I think the video would be helpful if the executable or server cannot run. I know that assignments turned in late get a zero, please grade the assignment based on what I had turned in last night and if the executable doesn't work you can watch the video. All of the design information and explanations in the video are not new and are already written in this README.
-
-Here is [my video demo](https://drive.google.com/file/d/1IUCyRxawrkA7u_DUdtRvgTyBm8htj6sK/view?usp=sharing) (any Carleton account can view). 
-
-
 ## Takeaways
 
 * Main problem of a keylogger is how to get the user to start it running and to obtain the necessary permissions
 * Running executables have a lot of access and control
+* [Video demo](https://drive.google.com/file/d/1IUCyRxawrkA7u_DUdtRvgTyBm8htj6sK/view?usp=sharing)
 
 ## What happens from a user's view? 
 
@@ -86,3 +78,11 @@ The following module must be installed:
 
 * [AES code example from pycryptodome documentation](https://www.pycryptodome.org/src/examples#encrypt-data-with-aes) used in `encrypt.py`, `client.py`, `server.py`
 * [Basic TCP server/client conversation from Amy Csizmar Dalal CS331 Computer Networks](https://github.com/acdalal/cs331-gopher/blob/main/gopherClient.py) used in `server.py` and `client.py`
+
+## Note on November 14th to the grader
+
+I ran out of time to submit a video demo before the deadline. I found an occasional problem with the TCP byte stream to Kali (in `client.py`) that can be fixed with two lines of code -- it already always worked on localhost (the many files changed is recompiling the executables). 
+
+I have added this extra commit, which is late, because I think the video would be helpful if the executable or server cannot run. I know that assignments turned in late get a zero, please grade the assignment based on what I had turned in last night and if the executable doesn't work you can watch the video. All of the design information and explanations in the video are not new and are already written in this README.
+
+Here is [my video demo](https://drive.google.com/file/d/1IUCyRxawrkA7u_DUdtRvgTyBm8htj6sK/view?usp=sharing) (any Carleton account can view). 
