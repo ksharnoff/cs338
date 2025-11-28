@@ -37,6 +37,8 @@ Kezia Sharnoff, CS338 Computer Security, November 12, 2025
 		* The connection is closed
 3. The inputted keys are written to a file, `username || server-keyslogged.txt` that is in the same directory as `server.py`
 
+The formatting of messages is: [length of key] + [new line] + [RSA encrypted key] + [AES encrypted [inputted keys] [new line] [username]]
+
 ## To make a new executable: 
 
 The following modules must be installed:
@@ -47,7 +49,7 @@ The following modules must be installed:
 All of the following steps should be done while in `project/user`
 1. `pyinstaller --onefile keylogger.py`
 2. Get the base64 version of that executable by `base64 -i dist/keylogger > ./keylogger64`
-3. Copy `keylogger64` into the `content` variable in `runner.py`
+3. Copy `keylogger64` into the `keyloggerExec` variable in `runner.py`
 4. `pyinstaller --onefile runner.py`
 5. Rename `runner` to `party_schedule`
 5. Run the keylogger double clicking the `party_schedule` executable, anywhere!
@@ -70,19 +72,17 @@ The following module must be installed:
 
 
 ## Future expansion
-1. Run it over UDP (If we get a high volume of keys, we don't care about reliability as much)
-2. Add a hash to the in transit data to make sure all of it arrived
+1. Run it over UDP (If we get a high volume of keys, we care more about the reliability of the server than the messages)
+2. Add a hash to the in transit data to make sure all of it arrived (AES encrypted is already hashed)
+3. Change the RSA encryption to be faster and more secure by using a real public-private key library (and maybe not RSA! maybe elliptic curve)
+4. Add protections to server against getting a connection hogged or sent invalid messages
+5. Change the structure of `client.py` and `keylogger.py` so that it is one TCP connection that is not reconnected (add message starting delimitation) but also that it rechecks the config file each time
+6. Add timer to client so that buffered data is sent (idea from grading comment from Jeff Ondich)
+7. Make it easier to setup & compile for different systems with less hardcoded files (idea from grading comment from Jeff Ondich)
 
 
 ## Major Sources of Code (smaller sources cited inline)
 
+* [pyinput keyboard input](https://pynput.readthedocs.io/en/latest/keyboard.html#monitoring-the-keyboard) used in `keylogger.py`
 * [AES code example from pycryptodome documentation](https://www.pycryptodome.org/src/examples#encrypt-data-with-aes) used in `encrypt.py`, `client.py`, `server.py`
 * [Basic TCP server/client conversation from Amy Csizmar Dalal CS331 Computer Networks](https://github.com/acdalal/cs331-gopher/blob/main/gopherClient.py) used in `server.py` and `client.py`
-
-## Note on November 14th to the grader
-
-I ran out of time to submit a video demo before the deadline. I found an occasional problem with the TCP byte stream to Kali (in `client.py`) that can be fixed with two lines of code -- it already always worked on localhost (the many files changed is recompiling the executables). 
-
-I have added this extra commit, which is late, because I think the video would be helpful if the executable or server cannot run. I know that assignments turned in late get a zero, please grade the assignment based on what I had turned in last night and if the executable doesn't work you can watch the video. All of the design information and explanations in the video are not new and are already written in this README.
-
-Here is [my video demo](https://drive.google.com/file/d/1IUCyRxawrkA7u_DUdtRvgTyBm8htj6sK/view?usp=sharing) (any Carleton account can view). 

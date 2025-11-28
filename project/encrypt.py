@@ -146,8 +146,54 @@ def decryptMessage(data, key):
 	return message.decode("utf-8")
 
 
-def main():
-	# first, create aes_key, encrypt it, encode it, decode it,
+def testEncryptMsg(aes_key, decryptedKey):
+	# Now, the message! Encrypt using the original aes_key and decrypt
+	# using the original aes_key and the new decryptedKey
+
+	msg = "SPACE t h SPACE e c BACKSPACE BACKSPACE BACKSPACE e SPACE c a k e SPACE p a r t y SPACE w i l l SPACE b e SPACE b e c a u s e SPACE i SPACE BACKSPACE BACKSPACE SHIFT I SPACE w a n t SPACE t o SPACE e a t SPACE c a k e"
+	# short starting strings also work!
+	msg = ""
+
+	startTime = time.perf_counter()
+
+	encryptedMsg = encryptMessage(msg, aes_key)
+	print("encrypted msg", type(encryptedMsg))
+	print(encryptedMsg)
+
+	endTime = time.perf_counter()
+	print(">>>>time for encrypting msg using aes: ", endTime - startTime)
+
+
+	startTime = time.perf_counter()
+
+	decryptedMsgOriginal = decryptMessage(encryptedMsg, aes_key)
+	print("decrypted key", type(decryptedMsgOriginal))
+	print(decryptedMsgOriginal)
+
+	endTime = time.perf_counter()
+	print(">>>>time for decrypting msg using aes: ", endTime - startTime)
+
+
+	startTime = time.perf_counter()
+
+	decryptedMsgNew = decryptMessage(encryptedMsg, decryptedKey)
+	print("decrypted key", type(decryptedMsgNew))
+	print(decryptedMsgNew)
+
+	endTime = time.perf_counter()
+	print(">>>>time for decrypting msg using aes: ", endTime - startTime)
+
+	if decryptedMsgNew != decryptedMsgOriginal:
+		print("DECRYPTION FAILED WITH DIFFERENT KEYS")
+		sys.exit(1)
+	else:
+		print("DECRYPTION THE SAME")
+
+	return encryptedMsg
+
+
+def testEncryptKey():
+	# create aes_key, encrypt it, encode it, decode it,
 	# decrypt it, still the same!
 
 	startTime = time.perf_counter()
@@ -216,48 +262,56 @@ def main():
 	else:
 		print("THE KEYS MATCH!!!!!")
 
-
-	# Now, the message! Encrypt using the original aes_key and decrypt
-	# using the original aes_key and the new decryptedKey
-
-	msg = "SPACE t h SPACE e c BACKSPACE BACKSPACE BACKSPACE e SPACE c a k e SPACE p a r t y SPACE w i l l SPACE b e SPACE b e c a u s e SPACE i SPACE BACKSPACE BACKSPACE SHIFT I SPACE w a n t SPACE t o SPACE e a t SPACE c a k e"
-	# short starting strings also work!
-	msg = ""
-
-	startTime = time.perf_counter()
-
-	encryptedMsg = encryptMessage(msg, aes_key)
-	print("encrypted msg", type(encryptedMsg))
-	print(encryptedMsg)
-
-	endTime = time.perf_counter()
-	print(">>>>time for encrypting msg using aes: ", endTime - startTime)
+	return aes_key, decryptedKey
 
 
-	startTime = time.perf_counter()
+def formatMessage(aes_key, msg):
+	length = len(aes_key)
 
-	decryptedMsgOriginal = decryptMessage(encryptedMsg, aes_key)
-	print("decrypted key", type(decryptedMsgOriginal))
-	print(decryptedMsgOriginal)
+	# one byte should be enough! because key length is 16 bits and then once encrypted
+	# it can become bigger, but bigger like 50 bytes not 300 bytes
 
-	endTime = time.perf_counter()
-	print(">>>>time for decrypting msg using aes: ", endTime - startTime)
+	lenBytes = bytes([length])
+
+	output = lenBytes + aes_key + msg
+
+	print("len aes key", str(len(aes_key)), "len message", str(len(msg)))
+	print("len total", str(len(output)))
+
+	return output
 
 
-	startTime = time.perf_counter()
+def deformatMessage(output, key, original):
+	newLen = output[0]
 
-	decryptedMsgNew = decryptMessage(encryptedMsg, decryptedKey)
-	print("decrypted key", type(decryptedMsgNew))
-	print(decryptedMsgNew)
+	newkey = output[1:newLen+1]
 
-	endTime = time.perf_counter()
-	print(">>>>time for decrypting msg using aes: ", endTime - startTime)
-
-	if decryptedMsgNew != decryptedMsgOriginal:
-		print("DECRYPTION FAILED WITH DIFFERENT KEYS")
-		sys.exit(1)
+	if newkey == key:
+		print("KEYS CORRECTLY RECOVERED! :D")
 	else:
-		print("DECRYPTION THE SAME")
+		print("KEYS NOT EQUAL")
+		sys.exit(1)
+
+
+	newmsg = output[newLen+1:]
+
+	if newmsg == original:
+		print("MSG CORRECTLY RECOVERED! :D")
+	else:
+		print("MSG NOT EQUAL")
+		sys.exit(1)
+		
+
+
+def main():
+	aes_key, decryptedKey = testEncryptKey()
+
+	msg = testEncryptMsg(aes_key, decryptedKey)
+
+	print("\n\n")
+
+	output = formatMessage(aes_key, msg)
+	deformatMessage(output, aes_key, msg)
 
 
 main()

