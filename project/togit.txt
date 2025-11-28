@@ -1,0 +1,8 @@
+TO GIT!
+
+moved the cake image stuff into the user folder (makes sense because is being used in runner.py)
+(image and base64 file)
+
+changed server and client to have correct usage of tcp byte stream! where sends the size of key initially so then can know how big the key is so then this will work on any server and not just my computer and my vm on my computer 
+
+added more future expansions to readme and specified the tcp byte stream stuff
